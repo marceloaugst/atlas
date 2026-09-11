@@ -136,7 +136,7 @@ Administradores poderão:
 7. [x] Admin
 8. [x] Google Books
 9. [x] Redis / Jobs / Cache
-10. [ ] RAG
+10. [x] RAG
 
 ---
 
