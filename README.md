@@ -118,7 +118,7 @@ Administradores poderão:
 5. [x] Checkout
 6. [x] Pedidos
 7. [x] Admin
-8. [ ] Google Books
+8. [x] Google Books
 9. [ ] Redis / Jobs / Cache
 10. [ ] RAG
 
