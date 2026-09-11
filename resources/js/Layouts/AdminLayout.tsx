@@ -10,6 +10,7 @@ const NAV = [
     { href: '/admin/pedidos', label: 'Pedidos' },
     { href: '/admin/clientes', label: 'Clientes' },
     { href: '/admin/coupons', label: 'Cupons' },
+    { href: '/admin/importar-livros', label: 'Importar Google Books' },
 ];
 
 export default function AdminLayout({ children }: PropsWithChildren) {

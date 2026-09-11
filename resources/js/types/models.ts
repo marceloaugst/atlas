@@ -45,6 +45,19 @@ export interface Cart {
     items: CartItem[];
 }
 
+export interface GoogleBook {
+    googleBooksId: string;
+    title: string;
+    authors: string[];
+    isbn: string | null;
+    publisher: string | null;
+    publishedAt: string | null;
+    pages: number | null;
+    description: string | null;
+    coverUrl: string | null;
+    categories: string[];
+}
+
 export interface Coupon {
     id: number;
     code: string;
