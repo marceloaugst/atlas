@@ -73,6 +73,22 @@ O PATH do sistema não foi alterado (decisão deliberada, para não afetar os ou
 
 ---
 
+# ⚙️ Redis e fila em desenvolvimento
+
+Cache, sessão e fila usam Redis (via `predis/predis`, já que este PHP não tem a extensão `phpredis`). O serviço "Redis" do Windows precisa estar rodando. Sem um worker ativo, jobs (como o e-mail de confirmação de pedido) ficam apenas enfileirados:
+
+```bash
+/c/php-8.5.6-Win32-vs17-x64/php.exe artisan queue:work
+```
+
+E para rodar as tarefas agendadas (limpar carrinhos abandonados, desativar cupons expirados, atualizar estatísticas do dashboard) manualmente em vez de esperar o cron real:
+
+```bash
+/c/php-8.5.6-Win32-vs17-x64/php.exe artisan schedule:work
+```
+
+---
+
 # 🎯 Objetivo do projeto
 
 O Atlas tem como objetivo simular uma aplicação real de e-commerce.
@@ -119,7 +135,7 @@ Administradores poderão:
 6. [x] Pedidos
 7. [x] Admin
 8. [x] Google Books
-9. [ ] Redis / Jobs / Cache
+9. [x] Redis / Jobs / Cache
 10. [ ] RAG
 
 ---
