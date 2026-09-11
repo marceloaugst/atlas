@@ -45,6 +45,48 @@ export interface Cart {
     items: CartItem[];
 }
 
+export interface CheckoutSummary {
+    subtotal: number;
+    discount: number;
+    shipping: number;
+    total: number;
+    coupon: string | null;
+}
+
+export interface OrderItem {
+    id: number;
+    product_id: number;
+    product_title: string;
+    unit_price: number;
+    quantity: number;
+    subtotal: number;
+}
+
+export interface Order {
+    uuid: string;
+    status: string;
+    subtotal: number;
+    discount: number;
+    shipping: number;
+    total: number;
+    customer_name: string;
+    customer_email: string;
+    placed_at: string;
+    items: OrderItem[];
+    address: {
+        street: string;
+        number: string;
+        neighborhood: string;
+        city: string;
+        state: string;
+        zip_code: string;
+    };
+    payment: {
+        method: string;
+        status: string;
+    } | null;
+}
+
 export interface Paginated<T> {
     data: T[];
     current_page: number;

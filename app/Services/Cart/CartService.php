@@ -91,6 +91,11 @@ class CartService
         $item->delete();
     }
 
+    public function clear(Cart $cart): void
+    {
+        $cart->items()->delete();
+    }
+
     private function assertPurchasable(Product $product, int $quantity): void
     {
         if (! $product->isPurchasable()) {
