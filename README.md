@@ -99,7 +99,7 @@ Administradores poderão:
 # 📋 Roadmap de implementação
 
 1. [x] Laravel + MySQL
-2. [ ] Produtos / Categorias
+2. [x] Produtos / Categorias
 3. [ ] React / Inertia
 4. [ ] Carrinho
 5. [ ] Checkout
