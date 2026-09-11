@@ -100,7 +100,7 @@ Administradores poderão:
 
 1. [x] Laravel + MySQL
 2. [x] Produtos / Categorias
-3. [ ] React / Inertia
+3. [x] React / Inertia
 4. [ ] Carrinho
 5. [ ] Checkout
 6. [ ] Pedidos
