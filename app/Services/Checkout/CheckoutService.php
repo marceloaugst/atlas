@@ -5,6 +5,7 @@ namespace App\Services\Checkout;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
+use App\Events\OrderPlaced;
 use App\Exceptions\CheckoutException;
 use App\Models\Address;
 use App\Models\Cart;
@@ -74,7 +75,7 @@ class CheckoutService
             throw new CheckoutException('Seu carrinho está vazio.');
         }
 
-        return DB::transaction(function () use ($cart, $address, $customerName, $customerEmail, $paymentMethod, $couponCode) {
+        $order = DB::transaction(function () use ($cart, $address, $customerName, $customerEmail, $paymentMethod, $couponCode) {
             // Row-lock and re-read every product now, inside the transaction, so
             // the stock we validate against is guaranteed current at the moment
             // payment is confirmed — not the possibly stale value the cart/page
@@ -148,6 +149,13 @@ class CheckoutService
 
             return $order;
         });
+
+        // Dispatched after the transaction commits, not from inside the closure -
+        // the listener is queued, and a fast worker could otherwise pick it up
+        // before the order/items/payment rows are actually visible to it.
+        OrderPlaced::dispatch($order);
+
+        return $order;
     }
 
     public function cancelOrder(Order $order): void

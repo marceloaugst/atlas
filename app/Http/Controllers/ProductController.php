@@ -27,7 +27,7 @@ class ProductController extends Controller
 
         return Inertia::render('Catalog/Index', [
             'products' => $products,
-            'categories' => Category::where('active', true)->orderBy('name')->get(),
+            'categories' => Category::activeCached(),
             'filters' => $request->only(['category', 'q']),
         ]);
     }

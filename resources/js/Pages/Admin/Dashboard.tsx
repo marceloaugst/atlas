@@ -10,14 +10,20 @@ interface Props {
         customersCount: number;
     };
     topProducts: { product_title: string; total_sold: number }[];
+    updatedAt: string;
 }
 
-export default function Dashboard({ metrics, topProducts }: Props) {
+export default function Dashboard({ metrics, topProducts, updatedAt }: Props) {
     return (
         <AdminLayout>
             <Head title="Dashboard" />
 
-            <h1 className="mb-6 text-2xl font-semibold">Dashboard</h1>
+            <div className="mb-6 flex items-baseline justify-between">
+                <h1 className="text-2xl font-semibold">Dashboard</h1>
+                <p className="text-xs text-slate-400">
+                    Atualizado às {new Date(updatedAt).toLocaleTimeString('pt-BR')}
+                </p>
+            </div>
 
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 <Metric label="Vendas hoje" value={formatPrice(metrics.salesToday)} />
