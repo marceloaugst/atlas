@@ -22,7 +22,7 @@ class ProductFactory extends Factory
             'publisher' => fake()->company(),
             'published_at' => fake()->dateTimeBetween('-20 years', 'now'),
             'pages' => fake()->numberBetween(80, 800),
-            'cover_url' => fake()->imageUrl(200, 300, 'books'),
+            'cover_url' => self::placeholderCover($title),
             'price' => fake()->numberBetween(2990, 19990),
             'stock' => fake()->numberBetween(0, 50),
             'active' => true,
@@ -38,5 +38,19 @@ class ProductFactory extends Factory
     public function outOfStock(): static
     {
         return $this->state(fn () => ['stock' => 0]);
+    }
+
+    /**
+     * via.placeholder.com (Faker's old default for imageUrl()) has shut down,
+     * so cover_url ended up pointing nowhere for every seeded product.
+     * placehold.co is a maintained equivalent.
+     */
+    private static function placeholderCover(string $title): string
+    {
+        $colors = ['1e293b', '7c2d12', '14532d', '1e3a8a', '581c87', '831843'];
+        $color = $colors[array_rand($colors)];
+        $label = urlencode(Str::limit($title, 20, ''));
+
+        return "https://placehold.co/400x600/{$color}/FFFFFF/png?text={$label}";
     }
 }
