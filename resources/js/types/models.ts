@@ -45,6 +45,20 @@ export interface Cart {
     items: CartItem[];
 }
 
+export interface Coupon {
+    id: number;
+    code: string;
+    type: 'PERCENTAGE' | 'FIXED';
+    value: number;
+    minimum_amount: number | null;
+    maximum_discount: number | null;
+    starts_at: string | null;
+    expires_at: string | null;
+    usage_limit: number | null;
+    usage_count: number;
+    active: boolean;
+}
+
 export interface CheckoutSummary {
     subtotal: number;
     discount: number;
@@ -86,6 +100,7 @@ export interface Order {
         method: string;
         status: string;
     } | null;
+    user?: { id: number; name: string; email: string } | null;
 }
 
 export interface Paginated<T> {

@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'cart' => fn () => app(CartService::class)->summary(),
             'auth' => [
-                'user' => $request->user()?->only(['id', 'name', 'email']),
+                'user' => $request->user()?->only(['id', 'name', 'email', 'is_admin']),
             ],
         ];
     }

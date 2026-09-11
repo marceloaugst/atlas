@@ -29,6 +29,11 @@ export default function AppLayout({ children }: PropsWithChildren) {
 
                         {auth.user ? (
                             <div className="flex items-center gap-4">
+                                {auth.user.is_admin && (
+                                    <Link href="/admin" className="text-slate-600 hover:text-slate-900">
+                                        Admin
+                                    </Link>
+                                )}
                                 <Link href="/minha-conta/pedidos" className="text-slate-600 hover:text-slate-900">
                                     Meus pedidos
                                 </Link>
