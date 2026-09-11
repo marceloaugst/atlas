@@ -1,4 +1,5 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
+import { useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import { formatPrice } from '@/lib/money';
 import { Product } from '@/types/models';
@@ -9,6 +10,16 @@ interface Props {
 
 export default function Show({ product }: Props) {
     const purchasable = product.active && product.stock > 0;
+    const [adding, setAdding] = useState(false);
+
+    function addToCart() {
+        setAdding(true);
+        router.post(
+            '/carrinho',
+            { product_id: product.id, quantity: 1 },
+            { preserveScroll: true, onFinish: () => setAdding(false) },
+        );
+    }
 
     return (
         <AppLayout>
@@ -33,7 +44,8 @@ export default function Show({ product }: Props) {
                     <p className="mt-6 text-3xl font-bold">{formatPrice(product.price)}</p>
 
                     <button
-                        disabled={!purchasable}
+                        disabled={!purchasable || adding}
+                        onClick={addToCart}
                         className="mt-4 rounded-lg bg-slate-900 px-6 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-slate-300"
                     >
                         {purchasable ? 'Adicionar ao carrinho' : 'Indisponível'}

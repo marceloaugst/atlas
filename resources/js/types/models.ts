@@ -31,6 +31,20 @@ export interface Product {
     authors: Author[];
 }
 
+export interface CartItem {
+    id: number;
+    cart_id: number;
+    product_id: number;
+    quantity: number;
+    unit_price: number;
+    product: Product;
+}
+
+export interface Cart {
+    id: number;
+    items: CartItem[];
+}
+
 export interface Paginated<T> {
     data: T[];
     current_page: number;
