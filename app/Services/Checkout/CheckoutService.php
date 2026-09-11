@@ -136,4 +136,21 @@ class CheckoutService
             return $order;
         });
     }
+
+    public function cancelOrder(Order $order): void
+    {
+        if (! in_array($order->status, [OrderStatus::Pending, OrderStatus::Paid], true)) {
+            throw new CheckoutException('Este pedido não pode mais ser cancelado.');
+        }
+
+        DB::transaction(function () use ($order) {
+            foreach ($order->items as $item) {
+                $item->product()->increment('stock', $item->quantity);
+            }
+
+            $order->coupon?->decrement('usage_count');
+
+            $order->update(['status' => OrderStatus::Canceled]);
+        });
+    }
 }

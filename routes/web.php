@@ -18,3 +18,10 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
 Route::get('/pedidos/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/minha-conta/pedidos', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/minha-conta/pedidos/{order}/cancelar', [OrderController::class, 'cancel'])->name('orders.cancel');
+});
+
+require __DIR__.'/auth.php';

@@ -1,9 +1,13 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { PropsWithChildren } from 'react';
 import { SharedProps } from '@/types';
 
 export default function AppLayout({ children }: PropsWithChildren) {
-    const { cart } = usePage<SharedProps>().props;
+    const { cart, auth } = usePage<SharedProps>().props;
+
+    function logout() {
+        router.post('/logout');
+    }
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -13,14 +17,37 @@ export default function AppLayout({ children }: PropsWithChildren) {
                         📚 Atlas
                     </Link>
 
-                    <Link href="/carrinho" className="flex items-center gap-2 text-sm font-medium">
-                        🛒 Carrinho
-                        {cart.count > 0 && (
-                            <span className="rounded-full bg-slate-900 px-2 py-0.5 text-xs text-white">
-                                {cart.count}
-                            </span>
+                    <div className="flex items-center gap-6 text-sm font-medium">
+                        <Link href="/carrinho" className="flex items-center gap-2">
+                            🛒 Carrinho
+                            {cart.count > 0 && (
+                                <span className="rounded-full bg-slate-900 px-2 py-0.5 text-xs text-white">
+                                    {cart.count}
+                                </span>
+                            )}
+                        </Link>
+
+                        {auth.user ? (
+                            <div className="flex items-center gap-4">
+                                <Link href="/minha-conta/pedidos" className="text-slate-600 hover:text-slate-900">
+                                    Meus pedidos
+                                </Link>
+                                <span className="text-slate-400">{auth.user.name}</span>
+                                <button onClick={logout} className="text-slate-600 hover:text-slate-900">
+                                    Sair
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-4">
+                                <Link href="/login" className="text-slate-600 hover:text-slate-900">
+                                    Entrar
+                                </Link>
+                                <Link href="/registro" className="text-slate-600 hover:text-slate-900">
+                                    Criar conta
+                                </Link>
+                            </div>
                         )}
-                    </Link>
+                    </div>
                 </div>
             </header>
 

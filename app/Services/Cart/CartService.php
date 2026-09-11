@@ -6,6 +6,7 @@ use App\Exceptions\CartException;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -94,6 +95,43 @@ class CartService
     public function clear(Cart $cart): void
     {
         $cart->items()->delete();
+    }
+
+    /**
+     * Folds the guest (session) cart into the user's persistent cart on
+     * login/registration, so items added before authenticating aren't lost.
+     *
+     * The caller must capture the session id BEFORE calling Auth::login()/
+     * Auth::attempt() — logging in regenerates the session id internally
+     * (session-fixation protection), so by the time this runs Session::getId()
+     * would no longer match the guest cart's stored session_id.
+     */
+    public function mergeGuestCartIntoUser(User $user, string $guestSessionId): void
+    {
+        $guestCart = Cart::where('session_id', $guestSessionId)->first();
+
+        if (! $guestCart) {
+            return;
+        }
+
+        $userCart = Cart::firstOrCreate(['user_id' => $user->id]);
+
+        foreach ($guestCart->items as $guestItem) {
+            $existing = $userCart->items()->where('product_id', $guestItem->product_id)->first();
+
+            if ($existing) {
+                $existing->update(['quantity' => $existing->quantity + $guestItem->quantity]);
+            } else {
+                $userCart->items()->create([
+                    'product_id' => $guestItem->product_id,
+                    'quantity' => $guestItem->quantity,
+                    'unit_price' => $guestItem->unit_price,
+                ]);
+            }
+        }
+
+        $guestCart->delete();
+        Session::put('cart_id', $userCart->id);
     }
 
     private function assertPurchasable(Product $product, int $quantity): void

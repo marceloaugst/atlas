@@ -1,10 +1,11 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import { formatPrice } from '@/lib/money';
-import { Order } from '@/types/models';
+import { Order, OrderItem } from '@/types/models';
 
 interface Props {
-    order: Order;
+    order: Order & { items: OrderItem[] };
+    canCancel: boolean;
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -16,7 +17,14 @@ const STATUS_LABELS: Record<string, string> = {
     CANCELED: 'Cancelado',
 };
 
-export default function Show({ order }: Props) {
+export default function Show({ order, canCancel }: Props) {
+    const errors = usePage().props.errors as Record<string, string>;
+
+    function cancelOrder() {
+        if (! confirm('Tem certeza que deseja cancelar este pedido?')) return;
+        router.post(`/minha-conta/pedidos/${order.uuid}/cancelar`);
+    }
+
     return (
         <AppLayout>
             <Head title={`Pedido #${order.uuid.slice(0, 8)}`} />
@@ -86,9 +94,19 @@ export default function Show({ order }: Props) {
                     )}
                 </div>
 
-                <Link href="/" className="mt-6 inline-block text-sm text-slate-500 hover:underline">
-                    &larr; Voltar ao catálogo
-                </Link>
+                {errors.order && <p className="mt-4 text-sm text-red-600">{errors.order}</p>}
+
+                <div className="mt-6 flex items-center justify-between">
+                    <Link href="/" className="text-sm text-slate-500 hover:underline">
+                        &larr; Voltar ao catálogo
+                    </Link>
+
+                    {canCancel && (
+                        <button onClick={cancelOrder} className="text-sm text-red-600 hover:underline">
+                            Cancelar pedido
+                        </button>
+                    )}
+                </div>
             </div>
         </AppLayout>
     );

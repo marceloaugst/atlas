@@ -2,6 +2,7 @@ import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { FormEvent, ReactNode, useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import { formatPrice } from '@/lib/money';
+import { SharedProps } from '@/types';
 import { Cart, CheckoutSummary } from '@/types/models';
 
 interface Props {
@@ -20,11 +21,12 @@ const PAYMENT_METHODS = [
 
 export default function Index({ cart, summary, couponCode, couponError }: Props) {
     const [couponInput, setCouponInput] = useState(couponCode ?? '');
-    const pageErrors = usePage().props.errors as Record<string, string>;
+    const { errors: sharedErrors, auth } = usePage<SharedProps>().props;
+    const pageErrors = sharedErrors as Record<string, string>;
 
     const { data, setData, post, processing, errors } = useForm({
-        customer_name: '',
-        customer_email: '',
+        customer_name: auth.user?.name ?? '',
+        customer_email: auth.user?.email ?? '',
         address: {
             name: '',
             zip_code: '',

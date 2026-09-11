@@ -72,7 +72,8 @@ export interface Order {
     customer_name: string;
     customer_email: string;
     placed_at: string;
-    items: OrderItem[];
+    items?: OrderItem[];
+    items_count?: number;
     address: {
         street: string;
         number: string;
