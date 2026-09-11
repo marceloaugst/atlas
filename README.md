@@ -60,6 +60,19 @@ O objetivo é praticar conceitos de desenvolvimento web moderno, incluindo:
 
 ---
 
+# ⚠️ PHP local: dois binários lado a lado
+
+Esta máquina tem dois PHPs instalados e o `php` do PATH continua apontando para o **8.2.26** (usado por outros projetos). O Atlas exige **PHP 8.3+** (Laravel 13), então use o binário 8.5 explicitamente ao rodar Composer/Artisan aqui:
+
+```bash
+/c/php-8.5.6-Win32-vs17-x64/php.exe artisan migrate
+/c/php-8.5.6-Win32-vs17-x64/php.exe "C:/ProgramData/ComposerSetup/bin/composer.phar" install
+```
+
+O PATH do sistema não foi alterado (decisão deliberada, para não afetar os outros projetos que ainda usam PHP 8.2).
+
+---
+
 # 🎯 Objetivo do projeto
 
 O Atlas tem como objetivo simular uma aplicação real de e-commerce.
