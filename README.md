@@ -102,7 +102,7 @@ Administradores poderão:
 2. [x] Produtos / Categorias
 3. [x] React / Inertia
 4. [x] Carrinho
-5. [ ] Checkout
+5. [x] Checkout
 6. [ ] Pedidos
 7. [ ] Admin
 8. [ ] Google Books
