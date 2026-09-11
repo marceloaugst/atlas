@@ -40,4 +40,10 @@ return [
         'key' => env('GOOGLE_BOOKS_API_KEY'),
     ],
 
+    'anthropic' => [
+        'url' => env('ANTHROPIC_API_URL', 'https://api.anthropic.com/v1'),
+        'key' => env('ANTHROPIC_API_KEY'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4-5'),
+    ],
+
 ];

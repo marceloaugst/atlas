@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
@@ -18,6 +19,9 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
 Route::get('/pedidos/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+Route::get('/assistente', [AssistantController::class, 'index'])->name('assistant.index');
+Route::post('/assistente', [AssistantController::class, 'ask'])->name('assistant.ask');
 
 Route::middleware('auth')->group(function () {
     Route::get('/minha-conta/pedidos', [OrderController::class, 'index'])->name('orders.index');

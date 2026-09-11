@@ -18,6 +18,10 @@ export default function AppLayout({ children }: PropsWithChildren) {
                     </Link>
 
                     <div className="flex items-center gap-6 text-sm font-medium">
+                        <Link href="/assistente" className="text-slate-600 hover:text-slate-900">
+                            ✨ Assistente
+                        </Link>
+
                         <Link href="/carrinho" className="flex items-center gap-2">
                             🛒 Carrinho
                             {cart.count > 0 && (
