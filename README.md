@@ -31,8 +31,8 @@ O objetivo é praticar conceitos de desenvolvimento web moderno, incluindo:
 
 ## Backend
 
-- PHP 8.2+
-- Laravel 12+
+- PHP 8.3+
+- Laravel 13+
 - MySQL 8+
 - Laravel Sanctum
 - Laravel Queue

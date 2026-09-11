@@ -10,8 +10,8 @@ use App\Models\Address;
 use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\Order;
-use App\Models\Product;
 use App\Services\Cart\CartService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -75,12 +75,25 @@ class CheckoutService
         }
 
         return DB::transaction(function () use ($cart, $address, $customerName, $customerEmail, $paymentMethod, $couponCode) {
-            foreach ($cart->items as $item) {
-                $product = Product::whereKey($item->product_id)->lockForUpdate()->first();
+            // Row-lock and re-read every product now, inside the transaction, so
+            // the stock we validate against is guaranteed current at the moment
+            // payment is confirmed — not the possibly stale value the cart/page
+            // was holding — and the same locked rows are reused below to decrement,
+            // closing the gap between the check and the write.
+            $lockedProducts = [];
 
-                if (! $product || ! $product->isPurchasable() || $product->stock < $item->quantity) {
+            foreach ($cart->items as $item) {
+                try {
+                    $product = $item->product->refreshForUpdate();
+                } catch (ModelNotFoundException) {
+                    throw new CheckoutException("O produto \"{$item->product->title}\" não está mais disponível.");
+                }
+
+                if (! $product->isPurchasable() || $product->stock < $item->quantity) {
                     throw new CheckoutException("O produto \"{$item->product->title}\" não tem mais estoque suficiente.");
                 }
+
+                $lockedProducts[$item->id] = $product;
             }
 
             $summary = $this->summary($cart, $couponCode);
@@ -114,7 +127,7 @@ class CheckoutService
                     'subtotal' => $item->quantity * $item->unit_price,
                 ]);
 
-                $item->product()->decrement('stock', $item->quantity);
+                $lockedProducts[$item->id]->decrement('stock', $item->quantity);
             }
 
             $summary['coupon']?->increment('usage_count');
@@ -145,6 +158,9 @@ class CheckoutService
 
         DB::transaction(function () use ($order) {
             foreach ($order->items as $item) {
+                // A single-row increment() is already an atomic `UPDATE ... SET stock = stock + ?`,
+                // so no preceding SELECT ... FOR UPDATE is needed here (unlike placeOrder, which
+                // reads the stock value first to decide whether the order can proceed at all).
                 $item->product()->increment('stock', $item->quantity);
             }
 
