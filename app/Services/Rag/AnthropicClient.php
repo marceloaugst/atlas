@@ -15,8 +15,7 @@ class AnthropicClient
         private readonly string $baseUrl,
         private readonly ?string $apiKey,
         private readonly string $model,
-    ) {
-    }
+    ) {}
 
     /**
      * Sends a single-turn message and returns the assistant's text reply.

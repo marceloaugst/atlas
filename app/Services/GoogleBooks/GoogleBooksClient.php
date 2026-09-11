@@ -11,8 +11,7 @@ class GoogleBooksClient
     public function __construct(
         private readonly string $baseUrl,
         private readonly ?string $apiKey,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{items: array<int, array<string, mixed>>, totalItems: int}

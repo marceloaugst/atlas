@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class Category extends Model
@@ -36,7 +37,7 @@ class Category extends Model
      * Active categories rarely change, but every catalog page load reads
      * them (the filter chips), so cache the list instead of re-querying.
      */
-    public static function activeCached(): \Illuminate\Support\Collection
+    public static function activeCached(): Collection
     {
         return Cache::remember(
             self::ACTIVE_CACHE_KEY,

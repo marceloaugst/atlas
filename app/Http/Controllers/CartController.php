@@ -14,9 +14,7 @@ use Inertia\Response;
 
 class CartController extends Controller
 {
-    public function __construct(private readonly CartService $carts)
-    {
-    }
+    public function __construct(private readonly CartService $carts) {}
 
     public function index(): Response
     {

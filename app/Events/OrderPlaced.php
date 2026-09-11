@@ -10,7 +10,5 @@ class OrderPlaced
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public readonly Order $order)
-    {
-    }
+    public function __construct(public readonly Order $order) {}
 }

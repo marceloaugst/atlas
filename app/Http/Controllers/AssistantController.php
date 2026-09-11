@@ -10,9 +10,7 @@ use Inertia\Response;
 
 class AssistantController extends Controller
 {
-    public function __construct(private readonly BookRecommendationService $recommendations)
-    {
-    }
+    public function __construct(private readonly BookRecommendationService $recommendations) {}
 
     public function index(): Response
     {

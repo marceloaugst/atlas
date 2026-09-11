@@ -19,8 +19,7 @@ class GoogleBookDTO
         public readonly ?string $description,
         public readonly ?string $coverUrl,
         public readonly array $categories,
-    ) {
-    }
+    ) {}
 
     public static function fromApiVolume(array $volume): self
     {

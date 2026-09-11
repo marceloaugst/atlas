@@ -23,9 +23,7 @@ class CheckoutService
 
     private const FLAT_SHIPPING_RATE = 1500;
 
-    public function __construct(private readonly CartService $carts)
-    {
-    }
+    public function __construct(private readonly CartService $carts) {}
 
     public function calculateShipping(int $subtotal): int
     {

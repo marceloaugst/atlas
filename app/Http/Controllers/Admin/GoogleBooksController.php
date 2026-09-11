@@ -14,9 +14,7 @@ use Inertia\Response;
 
 class GoogleBooksController extends Controller
 {
-    public function __construct(private readonly GoogleBooksService $googleBooks)
-    {
-    }
+    public function __construct(private readonly GoogleBooksService $googleBooks) {}
 
     public function index(Request $request): Response
     {

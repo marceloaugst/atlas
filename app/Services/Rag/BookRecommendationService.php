@@ -21,9 +21,7 @@ class BookRecommendationService
         'recomende', 'recomendar', 'algum', 'alguma', 'is', 'está',
     ];
 
-    public function __construct(private readonly AnthropicClient $client)
-    {
-    }
+    public function __construct(private readonly AnthropicClient $client) {}
 
     public function ask(string $question): array
     {
@@ -110,7 +108,7 @@ class BookRecommendationService
         $catalog = $products->isEmpty()
             ? 'Nenhum livro do catálogo corresponde a esta busca.'
             : $products->map(fn (Product $product) => sprintf(
-                "- \"%s\" por %s | categoria: %s | %s",
+                '- "%s" por %s | categoria: %s | %s',
                 $product->title,
                 $product->authors->pluck('name')->implode(', ') ?: 'autor desconhecido',
                 $product->category->name,

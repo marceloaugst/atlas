@@ -16,9 +16,7 @@ class GoogleBooksService
 {
     private const SEARCH_CACHE_TTL = 3600;
 
-    public function __construct(private readonly GoogleBooksClient $client)
-    {
-    }
+    public function __construct(private readonly GoogleBooksClient $client) {}
 
     /**
      * @return GoogleBookDTO[]

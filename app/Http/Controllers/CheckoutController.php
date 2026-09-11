@@ -17,8 +17,7 @@ class CheckoutController extends Controller
     public function __construct(
         private readonly CartService $carts,
         private readonly CheckoutService $checkout,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Response|RedirectResponse
     {
