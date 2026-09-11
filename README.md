@@ -103,7 +103,7 @@ Administradores poderão:
 3. [x] React / Inertia
 4. [x] Carrinho
 5. [x] Checkout
-6. [ ] Pedidos
+6. [x] Pedidos
 7. [ ] Admin
 8. [ ] Google Books
 9. [ ] Redis / Jobs / Cache
