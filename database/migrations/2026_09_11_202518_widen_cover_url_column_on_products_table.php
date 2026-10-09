@@ -18,6 +18,12 @@ return new class extends Migration
             return; // SQLite has no fixed-length VARCHAR to widen.
         }
 
+        if (Schema::getConnection()->getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE products ALTER COLUMN cover_url TYPE TEXT');
+
+            return;
+        }
+
         DB::statement('ALTER TABLE products MODIFY cover_url TEXT NULL');
     }
 
@@ -27,6 +33,12 @@ return new class extends Migration
     public function down(): void
     {
         if (Schema::getConnection()->getDriverName() === 'sqlite') {
+            return;
+        }
+
+        if (Schema::getConnection()->getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE products ALTER COLUMN cover_url TYPE VARCHAR(255)');
+
             return;
         }
 
