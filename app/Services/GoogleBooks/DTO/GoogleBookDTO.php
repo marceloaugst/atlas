@@ -33,7 +33,7 @@ class GoogleBookDTO
             publisher: $info['publisher'] ?? null,
             publishedAt: self::normalizeDate($info['publishedDate'] ?? null),
             pages: $info['pageCount'] ?? null,
-            description: $info['description'] ?? null,
+            description: self::sanitizeDescription($info['description'] ?? null),
             coverUrl: self::secureUrl($info['imageLinks']['thumbnail'] ?? $info['imageLinks']['smallThumbnail'] ?? null),
             categories: $info['categories'] ?? [],
         );
@@ -66,5 +66,23 @@ class GoogleBookDTO
     private static function secureUrl(?string $url): ?string
     {
         return $url ? str_replace('http://', 'https://', $url) : null;
+    }
+
+    /**
+     * Google Books descriptions often contain raw HTML (e.g. <p>, <b>, <i>).
+     * Strip the tags and collapse the resulting whitespace so it renders as plain text.
+     */
+    private static function sanitizeDescription(?string $description): ?string
+    {
+        if (! $description) {
+            return null;
+        }
+
+        $withBreaks = preg_replace('/<\/p>|<br\s*\/?>/i', "\n\n", $description);
+        $text = html_entity_decode(strip_tags($withBreaks), ENT_QUOTES, 'UTF-8');
+        $text = preg_replace('/[ \t]+/', ' ', $text);
+        $text = preg_replace('/\n{3,}/', "\n\n", $text);
+
+        return trim($text) ?: null;
     }
 }

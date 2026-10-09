@@ -100,4 +100,32 @@ class GoogleBookDTOTest extends TestCase
 
         $this->assertSame('Sem título', $dto->title);
     }
+
+    public function test_description_html_is_stripped_to_plain_text(): void
+    {
+        $dto = GoogleBookDTO::fromApiVolume([
+            'id' => 'abc123',
+            'volumeInfo' => [
+                'title' => 'Clean Code',
+                'description' => '<p><b>What others say</b></p> <p>"Great book" — <b>Kent Beck</b></p>',
+            ],
+        ]);
+
+        $this->assertStringNotContainsString('<', $dto->description);
+        $this->assertStringContainsString('What others say', $dto->description);
+        $this->assertStringContainsString('Kent Beck', $dto->description);
+    }
+
+    public function test_description_without_html_is_left_untouched(): void
+    {
+        $dto = GoogleBookDTO::fromApiVolume([
+            'id' => 'abc123',
+            'volumeInfo' => [
+                'title' => 'Clean Code',
+                'description' => 'A plain description.',
+            ],
+        ]);
+
+        $this->assertSame('A plain description.', $dto->description);
+    }
 }
